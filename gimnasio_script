@@ -1,0 +1,58 @@
+CREATE DATABASE gimnasio;
+
+USE gimnasio;
+
+
+CREATE TABLE tipo_de_documento(
+documentoid INT AUTO_INCREMENT PRIMARY KEY,
+tipo_de_documento ENUM('Pasaporte', 'Tarjeta de identidad', 'Cedula de ciudadania', 'Cedula de extranjeria') NOT NULL
+);
+
+CREATE TABLE especialidad (
+especialidadid INT AUTO_INCREMENT PRIMARY KEY,
+tipo_de_especialidad ENUM('cardio', 'pesas', 'yoga') NOT NULL
+);
+
+CREATE TABLE horario_de_trabajo (
+horarioid INT AUTO_INCREMENT PRIMARY KEY,
+modalidad_de_horario ENUM('mañana', 'tarde', 'noche') NOT NULL
+);
+
+CREATE TABLE socios (
+sociosid INT AUTO_INCREMENT PRIMARY KEY,
+nombre_completo VARCHAR(40) NOT NULL,
+direccion VARCHAR(40) NOT NULL,
+edad INT NOT NULL,
+genero ENUM('Femenino', 'Masculino', 'Otro') NOT NULL,
+telefono VARCHAR(12) NOT NULL,
+correo_electronico VARCHAR(40) UNIQUE NOT NULL,
+documentoid INT NOT NULL,
+FOREIGN KEY (documentoid) REFERENCES tipo_de_documento(documentoid)
+);
+
+CREATE TABLE entrenadores (
+entrenadoresid INT AUTO_INCREMENT PRIMARY KEY,
+nombre_completo VARCHAR(40) NOT NULL,
+especialidadid INT NOT NULL,
+horarioid INT NOT NULL,
+FOREIGN KEY (especialidadid) REFERENCES especialidad(especialidadid),
+FOREIGN KEY (horarioid) REFERENCES horario_de_trabajo(horarioid)
+);
+
+CREATE TABLE historial_de_asistencia (
+asistenciaid INT AUTO_INCREMENT PRIMARY KEY,
+hora_de_entrada TIME NOT NULL,
+hora_de_salida TIME NOT NULL,
+fecha DATE NOT NULL,
+sociosid INT NOT NULL,
+calorias_quemadas_en_sesion INT NOT NULL,
+FOREIGN KEY (sociosid) REFERENCES socios(sociosid)
+);
+
+CREATE TABLE clases_grupales (
+clasesid INT AUTO_INCREMENT PRIMARY KEY,
+nombre_de_la_clase VARCHAR(40) NOT NULL,
+cupo_maximo INT NOT NULL,
+horario DATETIME NOT NULL,
+duracion TIME NOT NULL
+);
